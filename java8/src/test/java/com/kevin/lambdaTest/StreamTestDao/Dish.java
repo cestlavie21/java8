@@ -1,4 +1,4 @@
-package com.kevin.StreamTest;
+package com.kevin.lambdaTest.StreamTestDao;
 
 public class Dish {
     private final String name;

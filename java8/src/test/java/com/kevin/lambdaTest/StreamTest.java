@@ -1,6 +1,6 @@
 package com.kevin.lambdaTest;
 
-import com.kevin.StreamTest.Dish;
+import com.kevin.lambdaTest.StreamTestDao.Dish;
 import com.kevin.lambdaTest.StreamTestDao.Trader;
 import com.kevin.lambdaTest.StreamTestDao.Transaction;
 import org.junit.Test;
@@ -25,7 +25,33 @@ public class StreamTest {
             new Dish("prawns", false, 300, Dish.Type.FISH),
             new Dish("salmon", false, 450, Dish.Type.FISH));
 
-    //Test  Stream.reduce
+    //Test Stream.filter 过滤筛选
+    @Test
+    public void filterTest() {
+        //获取卡路里小于两百的dish
+        List<String> list = menu.stream().filter((Dish d) -> d.getCalories() < 200).map(Dish::getName).collect(Collectors.toList());
+        //获取卡路里大于300 且 是素食的dish
+        menu.stream().filter(dish -> dish.getCalories() > 300 && dish.isVegetarian()).map(Dish::getName).forEach(System.out::println);
+    }
+
+    //Test Stream.map  映射流
+    @Test
+    public void mapTest() {
+        //求数组中个元素平方
+
+        Integer[] array = new Integer[]{1, 2, 3, 4, 5};
+
+        Arrays.stream(array).map(i -> i * i).forEach(System.out::println);
+
+        //flatmap  流的扁平化测试
+        //将集合中的字符拆分为一个数组
+        List<String> strings = Arrays.asList("java", "lambda", "map");
+        List<String> flatString = strings.stream().map(s -> s.split("")).flatMap(Arrays::stream).collect(toList());
+        System.out.println(flatString);
+
+    }
+
+    //Test  Stream.reduce  归并函数
     @Test
     public void reduceTest() {
         Integer[] arrays = {1, 2, 3, 4, 5};
@@ -193,15 +219,4 @@ public class StreamTest {
     }
 
     //多重循环Test
-    @Test
-    public  void  multiTest(){
-        Integer[] array = new Integer[]{1,2,3,4,5,6};
-
-        List<Stream<Dish>> list = Arrays.stream(array)
-                .map(i -> menu.stream().map(dish -> new Dish(i + "", true, i, Dish.Type.FISH))
-                ).collect(toList());
-
-        System.out.println(list);
-
-    }
 }
